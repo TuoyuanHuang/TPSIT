@@ -7,12 +7,16 @@ public class Contatore {
         this.cont=cont;
     }
     public void incrementa(int n){
-        synchronized (this) {
-            //prima deve acquisire un lock sull'oggetto this, è implicito che sta sincronizzando rispetto a this
-            this.cont = cont + n;
+        try {
+            s.acquire();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+        this.cont=cont+n;
+        s.release();
     }
     public void decrementa(int n){
         this.cont=cont-n;
     }
+
 }
